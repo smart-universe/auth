@@ -2,7 +2,6 @@ package com.auth.services;
 
 import java.util.function.Supplier;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -17,11 +16,14 @@ import com.auth.repositories.UserRepository;
 @Service
 public class JpaUserDetailsService implements UserDetailsService {
 
-	@Autowired
-	private UserRepository userRepo;
+	private final UserRepository userRepo;
 
-	@Autowired
-	private PasswordEncryption passwordEncryption;
+	private final PasswordEncryption passwordEncryption;
+
+	public JpaUserDetailsService(UserRepository userRepo, PasswordEncryption passwordEncryption) {
+		this.passwordEncryption = passwordEncryption;
+		this.userRepo = userRepo;
+	}
 
 	@Override
 	public CustomUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

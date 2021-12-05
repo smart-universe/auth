@@ -1,6 +1,6 @@
 package com.auth.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,16 +22,15 @@ import com.auth.services.AuthenticationProviderService;
 @Configuration
 public class ProjectConfig extends WebSecurityConfigurerAdapter {
 
-	@Autowired
-	private AuthenticationProviderService authenticationProvider;
+	private final AuthenticationProviderService authenticationProvider;
 
-	@Autowired
-	private JwtRequestFilter jwtRequestFilter;
+	private final JwtRequestFilter jwtRequestFilter;
 
+	public ProjectConfig(AuthenticationProviderService authenticationProvider, JwtRequestFilter jwtRequestFilter) {
+		this.authenticationProvider = authenticationProvider;
+		this.jwtRequestFilter = jwtRequestFilter;
+	}
 
-	/*
-	 * IN spring sercurity
-	 */
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) {
 		auth.authenticationProvider(authenticationProvider);
@@ -43,6 +42,5 @@ public class ProjectConfig extends WebSecurityConfigurerAdapter {
 				.authenticated().and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 	}
-	
-	
+
 }
