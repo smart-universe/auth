@@ -12,6 +12,8 @@ import com.auth.models.AuthenticationRequest;
 import com.auth.models.CustomUserDetails;
 import com.auth.models.EncryptionAlgorithm;
 import com.auth.models.User;
+import com.auth.models.UserNameRequest;
+import com.auth.models.UserNameResponse;
 import com.auth.services.AuthenticationProviderService;
 import com.auth.services.JpaUserDetailsService;
 import com.auth.services.JwtService;
@@ -69,6 +71,34 @@ public class LoginController {
 		final String jwt = jwtService.generateToken(userDetails);
 
 		return ResponseEntity.ok(new AuthenticateResponse(jwt));
+
+	}
+
+	@RequestMapping(value = "/checkUsername", method = RequestMethod.GET)
+	public ResponseEntity<?> checkUsername(@RequestBody UserNameRequest request) {
+		UserNameResponse response = new UserNameResponse();
+		try {
+
+			boolean isExists;
+
+			isExists = jpaUserDetailsService.userExists(request.getUsername());
+			response.setExists(isExists);
+
+			if (isExists) {
+				response.setMessage("UserName Exists");
+
+			} else {
+				response.setMessage("Sucessfull");
+			}
+
+			return ResponseEntity.ok(response);
+
+		} catch (Exception ex) {
+			// to do (add Logger)
+
+			response.setMessage("Internal server Error");
+			return (ResponseEntity<?>) ResponseEntity.internalServerError();
+		}
 
 	}
 

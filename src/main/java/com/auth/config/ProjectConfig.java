@@ -38,7 +38,7 @@ public class ProjectConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable().authorizeRequests().antMatchers("/authenticate", "/createUser").permitAll().anyRequest()
+		http.csrf().disable().authorizeRequests().antMatchers("/authenticate", "/createUser","/checkUsername").permitAll().anyRequest()
 				.authenticated().and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 	}
