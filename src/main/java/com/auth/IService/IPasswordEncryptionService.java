@@ -4,7 +4,7 @@ import org.springframework.security.core.Authentication;
 
 import com.auth.models.CustomUserDetails;
 import com.auth.models.EncryptionAlgorithm;
-import com.auth.models.User;
+import com.auth.models.Entities.User;
 
 public interface IPasswordEncryptionService {
 

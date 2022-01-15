@@ -19,10 +19,9 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @Service
 public class JwtService implements IJwtService {
 
-	@Value("$jwt.secret.validity")
-	public static long JWT_TOKEN_VALIDITY;
+	public static long JWT_TOKEN_VALIDITY = 18000;
 
-	@Value("$jwt.secret.key")
+	@Value("${jwt.secret.key}")
 	private String JWT_SECRET_KEY;
 
 	@Override
@@ -60,7 +59,6 @@ public class JwtService implements IJwtService {
 
 	@Override
 	public String createToken(Map<String, Object> claims, String subject) {
-
 		return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
 				.setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))
 				.signWith(SignatureAlgorithm.HS512, JWT_SECRET_KEY).compact();

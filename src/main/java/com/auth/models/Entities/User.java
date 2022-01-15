@@ -1,4 +1,4 @@
-package com.auth.models;
+package com.auth.models.Entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,9 +8,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.auth.models.EncryptionAlgorithm;
+
 @Entity
 public class User {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long userID;
@@ -86,6 +88,14 @@ public class User {
 
 	public void setAlgotithm(EncryptionAlgorithm algotithm) {
 		this.algotithm = algotithm;
+	}
+
+	public Long getUserID() {
+		return userID;
+	}
+
+	public void setUserID(Long userID) {
+		this.userID = userID;
 	}
 
 }

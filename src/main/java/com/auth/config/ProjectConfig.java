@@ -1,14 +1,11 @@
 package com.auth.config;
 
-
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.auth.filter.JwtRequestFilter;
 import com.auth.services.AuthenticationProviderService;
 
 /*
@@ -24,11 +21,9 @@ public class ProjectConfig extends WebSecurityConfigurerAdapter {
 
 	private final AuthenticationProviderService authenticationProvider;
 
-	private final JwtRequestFilter jwtRequestFilter;
-
-	public ProjectConfig(AuthenticationProviderService authenticationProvider, JwtRequestFilter jwtRequestFilter) {
+	public ProjectConfig(AuthenticationProviderService authenticationProvider) {
 		this.authenticationProvider = authenticationProvider;
-		this.jwtRequestFilter = jwtRequestFilter;
+
 	}
 
 	@Override
@@ -38,9 +33,11 @@ public class ProjectConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable().authorizeRequests().antMatchers("/authenticate", "/createUser","/checkUsername").permitAll().anyRequest()
-				.authenticated().and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+		http.csrf().disable().authorizeRequests()
+				.antMatchers("/auth/authenticate", "/auth/createUser", "/auth/checkUsername", "/auth/validateToken")
+				.permitAll().anyRequest().authenticated().and().sessionManagement()
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
 	}
 
 }

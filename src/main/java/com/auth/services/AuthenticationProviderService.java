@@ -1,5 +1,7 @@
 package com.auth.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -15,6 +17,8 @@ public class AuthenticationProviderService implements AuthenticationProvider {
 
 	private final PasswordEncryption passwordEncryption;
 
+	Logger logger = LoggerFactory.getLogger(AuthenticationProviderService.class);
+
 	public AuthenticationProviderService(JpaUserDetailsService userDetailsService,
 			PasswordEncryption passwordEncryption) {
 		this.passwordEncryption = passwordEncryption;
@@ -27,6 +31,7 @@ public class AuthenticationProviderService implements AuthenticationProvider {
 		String password = authentication.getCredentials().toString();
 
 		CustomUserDetails user = userDetailsService.loadUserByUsername(username);
+		logger.info("Getting Userdetails from DB : " + user.getUsername() + " the request username is : " + username);
 
 		return passwordEncryption.checkPassword(user, password, user.getUser().getAlgotithm());
 
